@@ -1,6 +1,12 @@
 ID := $(shell id -u)
-DOCKER_CONTAINER=rapid7/msf-ubuntu-x64-meterpreter:latest
-COMMON_GEN=-Wno-dev -DUSE_STATIC_MSVC_RUNTIMES=ON
+DOCKER_CONTAINER=msf-ubuntu-x64-meterpreter:obfuscator
+ARGS_OBF =  -DCMAKE_CXX_FLAGS="-Wl,--strip-all -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla"
+ARGS_OBF += -DCMAKE_C_FLAGS="-Wl,--strip-all -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla"
+COMMON_GEN=-Wno-dev -DUSE_STATIC_MSVC_RUNTIMES=ON -DCMAKE_VERBOSE_MAKEFILE=OFF
+COMMON_GEN += $(ARGS_OBF)
+
+# $(info COMMON_GEN: $(COMMON_GEN))
+
 COMMON_GEN_X86=-DCMAKE_TOOLCHAIN_FILE=../toolsets/i686-w64-mingw32.cmake -DBUILD_ARCH=Win32 ${COMMON_GEN}
 COMMON_GEN_X64=-DCMAKE_TOOLCHAIN_FILE=../toolsets/x86_64-w64-mingw32.cmake -DBUILD_ARCH=x64 ${COMMON_GEN}
 COMMON_BUILD=--config Release

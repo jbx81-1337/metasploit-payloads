@@ -1,11 +1,12 @@
 ID := $(shell id -u)
 DOCKER_CONTAINER=msf-ubuntu-x64-meterpreter:obfuscator
-ARGS_OBF =  -DCMAKE_CXX_FLAGS="-Wl,--strip-all -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla"
-ARGS_OBF += -DCMAKE_C_FLAGS="-Wl,--strip-all -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla"
-COMMON_GEN=-Wno-dev -DUSE_STATIC_MSVC_RUNTIMES=ON -DCMAKE_VERBOSE_MAKEFILE=OFF
+ARGS_OBF =  -DCMAKE_CXX_FLAGS="-Wl,--strip-all -O0 -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla"
+ARGS_OBF += -DCMAKE_C_FLAGS="-Wl,--strip-all -O0 -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla"
+ARGS_OBf += -DCMAKE_ASM_FLAGS="-O0"
+COMMON_GEN=-Wno-dev -DUSE_STATIC_MSVC_RUNTIMES=ON -DCMAKE_VERBOSE_MAKEFILE=ON
 COMMON_GEN += $(ARGS_OBF)
 
-# $(info COMMON_GEN: $(COMMON_GEN))
+$(info COMMON_GEN: $(COMMON_GEN))
 
 COMMON_GEN_X86=-DCMAKE_TOOLCHAIN_FILE=../toolsets/i686-w64-mingw32.cmake -DBUILD_ARCH=Win32 ${COMMON_GEN}
 COMMON_GEN_X64=-DCMAKE_TOOLCHAIN_FILE=../toolsets/x86_64-w64-mingw32.cmake -DBUILD_ARCH=x64 ${COMMON_GEN}

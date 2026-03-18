@@ -128,6 +128,10 @@ else()
     set(CMAKE_SHARED_LIBRARY_SUFFIX ".dll")
 endif()
 
+if (NO_REFLECTIVE_LOADER)
+    add_definitions(-DNO_REFLECTIVE_LOADER=1)
+endif()
+
 if(BUILD_ARCH MATCHES "Win32")
     set(TARGET_ARCH "x86")
     set(IS_X86 true)

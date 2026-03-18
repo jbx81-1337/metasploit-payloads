@@ -7,10 +7,14 @@
 
 #define InitAppInstance() { if( hAppInstance == NULL ) hAppInstance = GetModuleHandle( NULL ); }
 
-
+#ifndef NO_REFLECTIVE_LOADER
 #define REFLECTIVEDLLINJECTION_CUSTOM_DLLMAIN
 #define RDIDLL_NOEXPORT
 #include "../ReflectiveDLLInjection/dll/src/ReflectiveLoader.c"
+#else
+#include "../ReflectiveDLLInjection/dll/src/DirectSyscall.c"
+HINSTANCE hAppInstance = NULL; // External Loaders might not set this, so we get it from GetModuleHandle(NULL) in InitAppInstance()
+#endif
 #include "../ReflectiveDLLInjection/inject/src/GetProcAddressR.c"
 #include "../ReflectiveDLLInjection/inject/src/LoadLibraryR.c"
 

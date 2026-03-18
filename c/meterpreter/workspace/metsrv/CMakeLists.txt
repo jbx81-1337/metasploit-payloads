@@ -19,10 +19,16 @@ include_directories(../../source/common)
 include_directories(../../source/ReflectiveDLLInjection/common)
 
 set(SRC_DIR ../../source/metsrv)
-file(GLOB SRC_FILES
-    ${SRC_DIR}/*.c
-    ${MOD_DEF_DIR}/metsrv.def
-)
+if (NO_REFLECTIVE_LOADER)
+    file(GLOB SRC_FILES
+        ${SRC_DIR}/*.c
+    )
+else()
+    file(GLOB SRC_FILES
+        ${SRC_DIR}/*.c
+        ${MOD_DEF_DIR}/metsrv.def
+    )
+endif()
 add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}.${TARGET_ARCH})
 if(MSVC)

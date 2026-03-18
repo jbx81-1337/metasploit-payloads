@@ -6,15 +6,19 @@ endif
 
 ifeq ($(OBFUSCATE),1)
 	DOCKER_CONTAINER=msf-ubuntu-x64-meterpreter:obfuscator
-	ARGS_COMPILER = -Wl,--strip-all -Wl,--no-insert-timestamp -Wl,--build-id=none -O0 -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types
+	ARGS_COMPILER = -Wl,--strip-all,--build-id=none,--no-insert-timestamp,--exclude-all-symbols -fmodule-name=lib.dll -O0 -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-error=incompatible-pointer-types
 	ARGS_COMPILER += -mllvm -irobf-indbr -mllvm -irobf-icall -mllvm -irobf-indgv -mllvm -irobf-cse -mllvm -irobf-fla
 else
 	DOCKER_CONTAINER=rapid7/msf-ubuntu-x64-meterpreter:latest
-	ARGS_COMPILER = 
+	ARGS_COMPILER = -Wl,--strip-all,--build-id=none,--no-insert-timestamp,--exclude-all-symbols -O0
 endif
 
 ADDITIONAL_ARGS =  -DCMAKE_CXX_FLAGS="$(ARGS_COMPILER)" -DCMAKE_C_FLAGS="$(ARGS_COMPILER)" -DCMAKE_ASM_FLAGS="-O0"
 COMMON_GEN=-Wno-dev -DUSE_STATIC_MSVC_RUNTIMES=ON -DCMAKE_VERBOSE_MAKEFILE=ON
+ifeq ($(OBFUSCATE),1)
+	COMMON_GEN += -DOBFUSCATE=1 -DNO_REFLECTIVE_LOADER=1
+endif
+
 COMMON_GEN += $(ADDITIONAL_ARGS)
 
 COMMON_GEN_X86=-DCMAKE_TOOLCHAIN_FILE=../toolsets/i686-w64-mingw32.cmake -DBUILD_ARCH=Win32 ${COMMON_GEN}
@@ -24,6 +28,9 @@ COMMON_BUILD=--config Release
 all: meterpreter
 
 clean: meterpreter-x64-clean meterpreter-x86-clean
+
+strip:
+	@strip -s -x output/*.dll
 
 install:
 	@cp -f output/*.dll ../../../metasploit-framework/data/meterpreter

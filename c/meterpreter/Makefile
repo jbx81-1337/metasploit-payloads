@@ -396,7 +396,7 @@ meterpreter-ext-bofloader: meterpreter-ext-bofloader-x86 meterpreter-ext-bofload
 meterpreter-ext-bofloader-x86: meterpreter-ext-bofloader-x86-gen meterpreter-ext-bofloader-x86-build
 
 meterpreter-ext-bofloader-x86-gen:
-	@cmake -S workspace -B workspace/build/mingw-x86-ext-bofloader -DBUILD_ALL=OFF -DBUILD_EXT_bofloader=ON $(COMMON_GEN_X86)
+	@cmake -S workspace -B workspace/build/mingw-x86-ext-bofloader -DBUILD_ALL=OFF -DBUILD_EXT_BOFLOADER=ON $(COMMON_GEN_X86)
 
 meterpreter-ext-bofloader-x86-build:
 	@cmake --build workspace/build/mingw-x86-ext-bofloader $(COMMON_BUILD)
@@ -404,7 +404,7 @@ meterpreter-ext-bofloader-x86-build:
 meterpreter-ext-bofloader-x64: meterpreter-ext-bofloader-x64-gen meterpreter-ext-bofloader-x64-build
 
 meterpreter-ext-bofloader-x64-gen:
-	@cmake -S workspace -B workspace/build/mingw-x64-ext-bofloader -DBUILD_ALL=OFF -DBUILD_EXT_bofloader=ON $(COMMON_GEN_X64)
+	@cmake -S workspace -B workspace/build/mingw-x64-ext-bofloader -DBUILD_ALL=OFF -DBUILD_EXT_BOFLOADER=ON $(COMMON_GEN_X64)
 
 meterpreter-ext-bofloader-x64-build:
 	@cmake --build workspace/build/mingw-x64-ext-bofloader $(COMMON_BUILD)
